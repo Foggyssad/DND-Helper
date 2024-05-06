@@ -1,14 +1,13 @@
 import tkinter as tk
 from gui_factory import GUIFactory
-from character_builder_gui import CharacterBuilderGUI
+from Controller import Controller
 
 
 def main():
     root = tk.Tk()
-    factory = GUIFactory()
-    app = CharacterBuilderGUI(root, factory)
+    controller = Controller(root)
+    controller.create_first_window()
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()

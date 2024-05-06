@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import tkinter as tk
+from component_factory import GUIComponent, LabelComponent, EntryComponent, DropdownComponent, ButtonComponent
 
 
 class AbstractFactory(ABC):
@@ -22,17 +23,13 @@ class AbstractFactory(ABC):
 
 class GUIFactory(AbstractFactory):
     def create_label(self, master, text):
-        return tk.Label(master, text=text)
+        return LabelComponent().create(master, text=text)
 
     def create_entry(self, master):
-        return tk.Entry(master)
+        return EntryComponent().create(master)
 
     def create_dropdown(self, master, options, command):
-        var = tk.StringVar(master)
-        var.set(options[0])  # Set default value
-        dropdown = tk.OptionMenu(master, var, *options, command=command)
-        dropdown.config(width=10)
-        return dropdown
+        return DropdownComponent().create(master, options=options, command=command)
 
     def create_button(self, master, text, command):
-        return tk.Button(master, text=text, command=command)
+        return ButtonComponent().create(master, text=text, command=command)
