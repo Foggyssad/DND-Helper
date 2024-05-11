@@ -103,3 +103,8 @@ class Update:
         self.gui_manager.labels["Tool Proficiencies:"] = self.factory.create_label(self.master,
                                                                        "Tool Proficiencies: " + tool_proficiencies)
         self.gui_manager.labels["Tool Proficiencies:"].grid(row=self.gui_manager.name_label_row + 2, column=2, sticky='w')
+
+    def edit_character_data(self):
+        # Example function to handle editing character data
+        # You can implement editing functionality here
+        pass

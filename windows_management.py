@@ -1,3 +1,4 @@
+from character_builder import CharacterBuilder
 from dictionaries import Dictionaries
 from gui_factory import GUIFactory
 from calc import Calculations
@@ -5,7 +6,7 @@ from update_UI import Update
 
 
 class Window:
-    def __init__(self, master, gui_manager, second_window, third_window):
+    def __init__(self, master, gui_manager, second_window, third_window, fourth_window):
         self.master = master
         self.factory = GUIFactory()
         self.dictionaries = Dictionaries()
@@ -13,6 +14,7 @@ class Window:
         self.calc = Calculations()
         self.second_window = second_window
         self.third_window = third_window
+        self.fourth_window = fourth_window
         self.update = Update(master, gui_manager)
 
     def set_event_handler(self, event_handler):
@@ -20,6 +22,14 @@ class Window:
 
     def create_window(self):
         pass
+
+    def clear_window(self):
+        for key in list(self.gui_manager.labels.keys()):
+            self.gui_manager.remove_label(key)
+        for key in list(self.gui_manager.entries.keys()):
+            self.gui_manager.remove_entry(key)
+        for key in list(self.gui_manager.buttons.keys()):
+            self.gui_manager.remove_button(key)
 
     def create_counter_label(self):
         # Create label for displaying remaining points
@@ -49,7 +59,7 @@ class Window:
     def create_to_third_button(self):
         from events import EventHandler
         self.events = EventHandler(self.master, self.gui_manager)
-        self.events.set_windows(None, None, self.third_window)
+        self.events.set_windows(None, None, self.third_window, None)
 
         self.to_third_button = self.factory.create_button(self.master, "Go to Third Window",
                                                           command=self.events.on_to_third_button_click)
@@ -71,7 +81,7 @@ class Window:
     def create_submit_button(self):
         from events import EventHandler
         self.events = EventHandler(self.master, self.gui_manager)
-        self.events.set_windows(None, None, self.third_window)
+        self.events.set_windows(None, None, self.third_window, self.fourth_window)
 
         self.submit_button = self.factory.create_button(self.master, "Submit character", command=self.events.submit_character)
         self.submit_button.grid(row=len(self.gui_manager.labels) + 2, columnspan=2)  # Adjust row and column
@@ -80,7 +90,7 @@ class Window:
     def create_next_button(self):
         from events import EventHandler
         self.events = EventHandler(self.master, self.gui_manager)
-        self.events.set_windows(None, self.second_window, None)
+        self.events.set_windows(None, self.second_window, None, None)
 
         self.next_button = self.factory.create_button(self.master, "Next", command=self.events.on_next_button_click)
         self.next_button.grid(row=len(self.gui_manager.labels) + 1, columnspan=3, sticky="se")
@@ -94,10 +104,16 @@ class Window:
                                    ["Acolyte", "Criminal", "Folk Hero", "Haunted One", "Noble", "Sage", "Soldier"],
                                    command=self.update.update_proficiencies)
 
+    def create_edit_button(self):
+        # Example function to create an "Edit" button
+        edit_button = self.factory.create_button(self.master, "Edit", command=self.update.edit_character_data)
+        edit_button.grid(row=len(self.gui_manager.labels) + 1, columnspan=2)
+        self.gui_manager.buttons["Edit"] = edit_button
+
 
 class FirstWindow(Window):
     def __init__(self, master, gui_manager, second_window):
-        super().__init__(master, gui_manager, second_window, third_window=None)
+        super().__init__(master, gui_manager, second_window, third_window=None, fourth_window=None)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
@@ -136,17 +152,12 @@ class FirstWindow(Window):
 
 class SecondWindow(Window):
     def __init__(self, master, gui_manager, third_window):
-        super().__init__(master, gui_manager, second_window=None, third_window=third_window)
+        super().__init__(master, gui_manager, second_window=None, third_window=third_window, fourth_window=None)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
     def create_window(self):
-        for key in list(self.gui_manager.labels.keys()):
-            self.gui_manager.remove_label(key)
-        for key in list(self.gui_manager.entries.keys()):
-            self.gui_manager.remove_entry(key)
-        for key in list(self.gui_manager.buttons.keys()):
-            self.gui_manager.remove_button(key)
+        super().clear_window()
 
 
         # Create new UI elements
@@ -169,18 +180,13 @@ class SecondWindow(Window):
 
 
 class ThirdWindow(Window):
-    def __init__(self, master, gui_manager):
-        super().__init__(master, gui_manager, second_window=None, third_window=None)
+    def __init__(self, master, gui_manager, fourth_window):
+        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=fourth_window)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
     def create_window(self):
-        for key in list(self.gui_manager.labels.keys()):
-            self.gui_manager.remove_label(key)
-        for key in list(self.gui_manager.entries.keys()):
-            self.gui_manager.remove_entry(key)
-        for key in list(self.gui_manager.buttons.keys()):
-            self.gui_manager.remove_button(key)
+        super().clear_window()
 
         # Define the fields for the third window
         fields = [
@@ -192,3 +198,31 @@ class ThirdWindow(Window):
             self.gui_manager.create_label_entry(field)
 
         super().create_submit_button()
+
+
+class FourthWindow(Window):
+    def __init__(self, master, gui_manager, character_data):
+        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=None)
+        self.factory = GUIFactory()
+        self.update = Update(master, gui_manager)
+        self.character_data = character_data  # Assuming you pass the character data as an argument
+        self.character_builder = CharacterBuilder()
+
+    def create_window(self):
+        super().clear_window()
+
+        # Attributes to exclude from direct entry creation (e.g., methods)
+        excluded_attributes = ["build"]
+
+        # Populate UI with character data from the CharacterBuilder instance
+        for attribute, value in self.character_builder.__dict__.items():
+            # Exclude certain attributes (e.g., methods)
+            if attribute in excluded_attributes or callable(value):
+                continue
+
+            # Convert underscores to spaces for better label representation
+            field_name = attribute.replace("_", " ")
+            # Create label for each characteristic
+            self.gui_manager.create_label_entry(field_name.capitalize() + ":", default_text=str(value))
+
+        super().create_edit_button()
