@@ -23,4 +23,11 @@ class EventHandler:
 
     def submit_character(self):
         self.data_conservation.save_data()
-        self.fourth_window.create_window()
+
+        # Update the character_builder instance in the fourth window
+        if self.fourth_window:
+            self.fourth_window.character_builder = self.data_conservation.character_builder
+
+        # Create the fourth window
+        if self.fourth_window:
+            self.fourth_window.create_window()

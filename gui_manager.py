@@ -13,11 +13,9 @@ class GUIManager:
     def create_label_entry(self, label_text, default_text=""):
         row = len(self.labels)
         label = self.factory.create_label(self.master, label_text)
-        label.grid(row=row, column=0)
+        label.grid(row=row, column=0, sticky='w')  # Align label to the left
         entry = self.factory.create_entry(self.master)
-        print("Default Text:", default_text)
-        print("Entry Widget:", entry)
-        entry.insert("end", default_text)  # Use "end" instead of 0 as the index
+        entry.insert("end", default_text)
         entry.grid(row=row, column=1)
         self.add_label(label_text, label)
         self.add_entry(label_text, entry)

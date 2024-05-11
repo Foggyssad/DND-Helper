@@ -6,7 +6,7 @@ from update_UI import Update
 
 
 class Window:
-    def __init__(self, master, gui_manager, second_window, third_window, fourth_window):
+    def __init__(self, master, gui_manager, second_window, third_window, fourth_window, character_builder):
         self.master = master
         self.factory = GUIFactory()
         self.dictionaries = Dictionaries()
@@ -16,6 +16,7 @@ class Window:
         self.third_window = third_window
         self.fourth_window = fourth_window
         self.update = Update(master, gui_manager)
+        self.character_builder = character_builder
 
     def set_event_handler(self, event_handler):
         self.events = event_handler
@@ -112,8 +113,8 @@ class Window:
 
 
 class FirstWindow(Window):
-    def __init__(self, master, gui_manager, second_window):
-        super().__init__(master, gui_manager, second_window, third_window=None, fourth_window=None)
+    def __init__(self, master, gui_manager, second_window, character_builder):
+        super().__init__(master, gui_manager, second_window, third_window=None, fourth_window=None, character_builder=character_builder)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
@@ -151,8 +152,8 @@ class FirstWindow(Window):
 
 
 class SecondWindow(Window):
-    def __init__(self, master, gui_manager, third_window):
-        super().__init__(master, gui_manager, second_window=None, third_window=third_window, fourth_window=None)
+    def __init__(self, master, gui_manager, third_window, character_builder):
+        super().__init__(master, gui_manager, second_window=None, third_window=third_window, fourth_window=None, character_builder=character_builder)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
@@ -180,8 +181,8 @@ class SecondWindow(Window):
 
 
 class ThirdWindow(Window):
-    def __init__(self, master, gui_manager, fourth_window):
-        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=fourth_window)
+    def __init__(self, master, gui_manager, fourth_window, character_builder):
+        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=fourth_window, character_builder=character_builder)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
 
@@ -196,33 +197,35 @@ class ThirdWindow(Window):
         # Create new UI elements for the third window
         for field in fields:
             self.gui_manager.create_label_entry(field)
+            print(self.gui_manager.entries[field].cget("text"))
 
         super().create_submit_button()
 
 
 class FourthWindow(Window):
-    def __init__(self, master, gui_manager, character_data):
-        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=None)
+    def __init__(self, master, gui_manager, character_builder):
+        super().__init__(master, gui_manager, second_window=None, third_window=None, fourth_window=None, character_builder=character_builder)
         self.factory = GUIFactory()
         self.update = Update(master, gui_manager)
-        self.character_data = character_data  # Assuming you pass the character data as an argument
-        self.character_builder = CharacterBuilder()
+        self.character_builder = character_builder  # Assuming you pass the character data as an argument
 
     def create_window(self):
         super().clear_window()
 
-        # Attributes to exclude from direct entry creation (e.g., methods)
-        excluded_attributes = ["build"]
+        # Create labels and entries for base characteristics
+        base_characteristics = ["name", "race", "character_class", "stats", "level", "hp"]
+        for attribute in base_characteristics:
+            label_text = attribute.capitalize() + ":"
+            default_text = str(getattr(self.character_builder, attribute, ""))
+            self.gui_manager.create_label_entry(label_text, default_text=default_text)
 
-        # Populate UI with character data from the CharacterBuilder instance
-        for attribute, value in self.character_builder.__dict__.items():
-            # Exclude certain attributes (e.g., methods)
-            if attribute in excluded_attributes or callable(value):
-                continue
-
-            # Convert underscores to spaces for better label representation
-            field_name = attribute.replace("_", " ")
-            # Create label for each characteristic
-            self.gui_manager.create_label_entry(field_name.capitalize() + ":", default_text=str(value))
+        # Create labels and entries for specific attributes
+        specific_attributes = ["skill_proficiencies", "tool_proficiencies", "inventory", "armour_class",
+                               "background", "history", "hair", "skin", "eyes", "height", "weight", "age", "gender",
+                               "alignment"]
+        for attribute in specific_attributes:
+            label_text = attribute.capitalize() + ":"
+            default_text = str(getattr(self.character_builder, attribute, ""))
+            self.gui_manager.create_label_entry(label_text, default_text=default_text)
 
         super().create_edit_button()
