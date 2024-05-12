@@ -28,8 +28,8 @@ class GUIFactory(AbstractFactory):
     def create_entry(self, master):
         return EntryComponent().create(master)
 
-    def create_dropdown(self, master, options, command):
-        return DropdownComponent().create(master, options=options, command=command)
+    def create_dropdown(self, master, options, command, variable=None):
+        return DropdownComponent().create(master, options=options, command=command, variable=variable)
 
     def create_button(self, master, text, command):
         return ButtonComponent().create(master, text=text, command=command)

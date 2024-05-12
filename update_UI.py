@@ -19,6 +19,7 @@ class Update:
         # Update the armour dropdown options
         armour_type = self.gui_manager.entries["Armour Type:"].cget("text")
         armours = self.dictionaries.ARMOUR_TYPES.get(armour_type, ["None"])
+        self.gui_manager.row_count = 2
         self.gui_manager.create_dropdown_entry("Armour:", armours, command=self.update_armour_class_value)
 
         self.calc.calculate_armour_class(self.gui_manager)
@@ -64,8 +65,11 @@ class Update:
                 ["Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma"].index(stat)]
             modifier = race_modifiers.get(stat, 0)  # Get the race modifier for the current stat
             modified_stat += modifier
-            self.gui_manager.labels["Modified " + stat].config(
-                text=f"Modified {stat}: {modified_stat}")  # Update the modified stat label
+
+            # Update the modified stat label
+            label_key = "Modified " + stat
+            label = self.gui_manager.labels[label_key]  # Retrieve the reference to the label widget
+            label.config(text=f"Modified {stat}: {modified_stat}")  # Update the GUI label text
 
     def update_proficiencies(self, *args):
         # Remove previous skill and tool proficiency labels if they exist
@@ -103,8 +107,3 @@ class Update:
         self.gui_manager.labels["Tool Proficiencies:"] = self.factory.create_label(self.master,
                                                                        "Tool Proficiencies: " + tool_proficiencies)
         self.gui_manager.labels["Tool Proficiencies:"].grid(row=self.gui_manager.name_label_row + 2, column=2, sticky='w')
-
-    def edit_character_data(self):
-        # Example function to handle editing character data
-        # You can implement editing functionality here
-        pass
