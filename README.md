@@ -1,5 +1,4 @@
 # Dungeons and Dragons (DND) Character Sheet Creator
-
 ---
 ## Introduction:
 
