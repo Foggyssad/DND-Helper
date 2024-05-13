@@ -1,5 +1,5 @@
 # Dungeons and Dragons (DND) Character Sheet Creator
----
+
 ## Introduction:
 
 1. The purpose of the application is to provide the user with an interface to create character sheet for tabletop RPG DND.
