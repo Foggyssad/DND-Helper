@@ -1,7 +1,5 @@
 # Dungeons and Dragons (DND) Character Sheet Creator
 
-### Made by `Mykhailo Yakymenko` from `EIFu-23`
-
 ---
 ## Introduction:
 
