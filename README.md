@@ -217,9 +217,9 @@ In total there are 6 unittests that cover core functionality.
 
 ### Conclusions:
 
-The application successfully implements core functionalities related to character creation and management, providing a tool for DND players to create and modify their characters' characteristics.
-The application follows modular design which allows to easily extend and maintain functionality.
-The application will be extended to allow creation of multiple character sheets and some new not yet implemented parameters such as feats and how the level of character affects the stats. 
+   The application successfully implements core functionalities related to character creation and management, providing a tool for DND players to create and modify their characters' characteristics.
+   The application follows modular design which allows to easily extend and maintain functionality.
+   The application will be extended to allow creation of multiple character sheets and some new not yet implemented parameters such as feats and how the level of character affects the stats. 
 
 
 ### Extensibility:
@@ -227,5 +227,4 @@ The application will be extended to allow creation of multiple character sheets 
 1. **Multiple Characters**: Introduce new functionality of handling and editing not one but multiple characters.
 2. **Creation of new windows**: Creating the new subclass for parant class `Window` for each new window. 
 3. **Creation of new GUI elements**: By adding the additional subclass into the `GUIComponent` class and new respective method into `GUIFactory` class, the new element could be added.
-4. **Creation of additional characteristics**: Can be done through adding characteristic into CharacterBuilder class. 
-5. **Optimization and Performance**: Probably after course work, I'll rewrite ksm-engine to other programming language, such as, `Rust` or `C#`, to make backend part as fast as possible.
+4. **Creation of additional characteristics**: Can be done through adding characteristic into CharacterBuilder class.
